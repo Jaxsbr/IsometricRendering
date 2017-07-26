@@ -60,6 +60,8 @@ class IsometricMap {
     ctx: CanvasRenderingContext2D;
     grid: Tile[][];
     tileSize: number = 75;
+    castleLoaded: boolean = false;
+    castle: HTMLImageElement;
 
     constructor(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
@@ -67,9 +69,17 @@ class IsometricMap {
     }
 
     public init(): void {
+        this.castle = new Image(75, 75);
+        this.castle.onload = (() => this.imageLoaded());  
+        this.castle.src = 'castle.png';
+
         this.initGrid();        
         this.loop();
     }
+
+    imageLoaded() {
+        this.castleLoaded = true;
+    }    
 
     loop() {
         //this.update();
@@ -93,6 +103,16 @@ class IsometricMap {
             for (var col = 0; col < 4; col++) {
                 this.grid[row][col].draw(this.ctx);
             }
+        }
+
+        if (this.castleLoaded) {
+            var tile = this.grid[1][1];
+            var x = tile.x + 150;
+            var y = tile.y - 150;
+
+            var isoPoint = tile.getIsometricPoint(x, y);
+            this.ctx.drawImage(
+                this.castle, isoPoint.x - (75 / 2), isoPoint.y - (75 / 2), tile.width, tile.height);
         }
     }
 }

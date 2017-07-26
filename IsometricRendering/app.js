@@ -44,12 +44,20 @@ var Tile = (function () {
 var IsometricMap = (function () {
     function IsometricMap(canvas) {
         this.tileSize = 75;
+        this.castleLoaded = false;
         this.canvas = canvas;
         this.ctx = this.canvas.getContext('2d');
     }
     IsometricMap.prototype.init = function () {
+        var _this = this;
+        this.castle = new Image(75, 75);
+        this.castle.onload = (function () { return _this.imageLoaded(); });
+        this.castle.src = 'castle.png';
         this.initGrid();
         this.loop();
+    };
+    IsometricMap.prototype.imageLoaded = function () {
+        this.castleLoaded = true;
     };
     IsometricMap.prototype.loop = function () {
         var _this = this;
@@ -71,6 +79,13 @@ var IsometricMap = (function () {
             for (var col = 0; col < 4; col++) {
                 this.grid[row][col].draw(this.ctx);
             }
+        }
+        if (this.castleLoaded) {
+            var tile = this.grid[1][1];
+            var x = tile.x + 150;
+            var y = tile.y - 150;
+            var isoPoint = tile.getIsometricPoint(x, y);
+            this.ctx.drawImage(this.castle, isoPoint.x - (75 / 2), isoPoint.y - (75 / 2), tile.width, tile.height);
         }
     };
     return IsometricMap;
