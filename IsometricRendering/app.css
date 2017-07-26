@@ -1,7 +1,4 @@
-﻿body {
-    font-family: 'Segoe UI', sans-serif;
-}
-
-span {
-    font-style: italic;
+﻿#myCanvas {
+    /*Cornflower blue*/
+    background-color: #6495ed;
 }
